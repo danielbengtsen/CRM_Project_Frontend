@@ -72,7 +72,7 @@ ul.header li a:hover:not(.active) {
 }
 
 .btnBorder {
-  border: 2px outset #111111;
+  border: 2px outset #222222;
   background-color: #444444;
 }
 
@@ -81,7 +81,6 @@ ul.header li a:hover:not(.active) {
 }
 
 .btnBorderClose {
-  border: 2px outset firebrick;
   margin-left: 10px;
 }
 
@@ -100,7 +99,7 @@ ul.header li a:hover:not(.active) {
 }
 
 .ownList {
-  background: linear-gradient(to bottom right, #333, #0e0b16);
+  background: linear-gradient(to bottom right, #333, #222222);
   border-radius: 20px !important;
 }
 
@@ -129,8 +128,8 @@ ul.header li a:hover:not(.active) {
 }
 
 .allUsersHr {
-  border-top: 1px solid #6f6f8673;
-  border-bottom: 1px solid #6f6f8673;
+  border-top: 1px solid whitesmoke;
+  border-bottom: 1px solid whitesmoke;
   max-width: 90%;
-  background-color: #6f6f8673;
+  background-color: whitesmoke;
 }

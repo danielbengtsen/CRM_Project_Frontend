@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import apiFacade from './apiFacade';
+import Contact from './Contact';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import jwt_decode from "jwt-decode";
 import 'react-tabs/style/react-tabs.css';
@@ -106,114 +107,36 @@ export function CreateContact({ createTheContact, msg })
 export function AllContacts({ msg })
 {
     const [contacts, setContacts] = useState([]);
-    const [contact, setContact] = useState();
-    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
 
-    function showAllContacts(event) {
+    function handleSubmit(event) {
         event.preventDefault();
         apiFacade.getAllContacts()
             .then(array => {
                 setContacts(array);
             })
-            .catch(err => {
-                Promise.resolve(err.fullError).then(function (value) {
-                    setError(value.message);
-                });
-                setTimeout(() => {
-                    setError("");
-                  }, 10000)
-            });
     }
 
-    function showSingleContact(email) {
-        apiFacade.getSingleContact(email)
-            .then(res => {
-                setContact(res);
-                console.log(contact);
+    function handleDelete(name) {
+        /* apiFacade.deleteUser(name)
+            .then(updateUsers); */
+    }
+
+    function handleEdit() {
+        apiFacade.getAllContacts()
+            .then(array => {
+                setContacts(array);
             })
-            .catch(err => {
-                Promise.resolve(err.fullError).then(function (value) {
-                    setError(value.message);
-                });
-                setTimeout(() => {
-                    setError("");
-                  }, 10000)
-            });
-            console.log(email);
     }
-
-    let displaySingleContact = (contact) => (
-        <div key={contact.phone}>
-            <ul className="list-group mb-4">
-                <Grid container spacing={0}>
-                    <Grid item xs={3}>
-                        <li className="list-group-item ownList">
-                            <div className="mb-1">
-                                <PersonIcon /> {contact.name}
-                            </div>
-                            <div className="mb-1">
-                                <AlternateEmailIcon /> {contact.email}
-                            </div>
-                            <div className="mb-1">
-                                <BusinessIcon /> {contact.company}
-                            </div>
-                            <div className="mb-1">
-                                <WorkIcon /> {contact.jobtitle}
-                            </div>
-                            <div className="mb-1">
-                                <PhoneIcon /> {contact.phone}
-                            </div>
-                        </li>
-                    </Grid>
-                </Grid>
-            </ul>
-        </div>
-    );
-
-    let displayContacts = contacts.map((contact) => (
-        <div key={contact.email}>
-            <ul className="list-group mb-4">
-                <Grid container spacing={0}>
-                    <Grid item xs={3}>
-                        <li className="list-group-item ownList">
-                            <div className="mb-1">
-                                <PersonIcon /> {contact.name}
-                            </div>
-                            <div className="mb-1">
-                                <AlternateEmailIcon /> {contact.email}
-                            </div>
-                            {/* <div className="mb-1">
-                                <BusinessIcon /> {contact.company}
-                            </div>
-                            <div className="mb-1">
-                                <WorkIcon /> {contact.jobtitle}
-                            </div> */}
-                            <div className="mb-1">
-                                <PhoneIcon /> {contact.phone}
-                            </div>
-                            <div>
-                                <button type="button" onClick={() => showSingleContact(contact.email)} className="btn btn-black btnBorder">Show details</button>
-                            </div>
-                        </li>
-                    </Grid>
-                </Grid>
-            </ul>
-        </div>
-    ));
 
     return (
         <div>
             <h2>All Contacts</h2>
-            <form>
-                    <button onClick={showAllContacts} type="button" className="btn btn-black btnBorder">Show all contacts</button>
-            </form>
-
-            <br />
-            <hr className="ownHr" />
-            <p>{msg}{error}</p>
-
-            {displayContacts}
+            <hr className="ownHr"/>
+            <button className="btn btn-black btnBorder" onClick={handleSubmit}>Get Contacts</button> <br/> <br/>
+            <hr className="ownHr"/>
+            <Contact contacts={contacts} loading={loading} handleDelete={handleDelete} />
         </div>
     )
 }
