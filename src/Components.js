@@ -106,6 +106,7 @@ export function CreateContact({ createTheContact, msg })
 export function AllContacts({ msg })
 {
     const [contacts, setContacts] = useState([]);
+    const [contact, setContact] = useState();
     const [error, setError] = useState('');
 
 
@@ -125,9 +126,54 @@ export function AllContacts({ msg })
             });
     }
 
+    function showSingleContact(email) {
+        apiFacade.getSingleContact(email)
+            .then(res => {
+                setContact(res);
+                console.log(contact);
+            })
+            .catch(err => {
+                Promise.resolve(err.fullError).then(function (value) {
+                    setError(value.message);
+                });
+                setTimeout(() => {
+                    setError("");
+                  }, 10000)
+            });
+            console.log(email);
+    }
+
+    let displaySingleContact = (contact) => (
+        <div key={contact.phone}>
+            <ul className="list-group mb-4">
+                <Grid container spacing={0}>
+                    <Grid item xs={3}>
+                        <li className="list-group-item ownList">
+                            <div className="mb-1">
+                                <PersonIcon /> {contact.name}
+                            </div>
+                            <div className="mb-1">
+                                <AlternateEmailIcon /> {contact.email}
+                            </div>
+                            <div className="mb-1">
+                                <BusinessIcon /> {contact.company}
+                            </div>
+                            <div className="mb-1">
+                                <WorkIcon /> {contact.jobtitle}
+                            </div>
+                            <div className="mb-1">
+                                <PhoneIcon /> {contact.phone}
+                            </div>
+                        </li>
+                    </Grid>
+                </Grid>
+            </ul>
+        </div>
+    );
+
     let displayContacts = contacts.map((contact) => (
-        <div>
-            <ul className="list-group mb-4" key={contact.email}>
+        <div key={contact.email}>
+            <ul className="list-group mb-4">
                 <Grid container spacing={0}>
                     <Grid item xs={3}>
                         <li className="list-group-item ownList">
@@ -147,7 +193,7 @@ export function AllContacts({ msg })
                                 <PhoneIcon /> {contact.phone}
                             </div>
                             <div>
-                                <button type="button" className="btn btn-black btnBorder">Show details</button>
+                                <button type="button" onClick={() => showSingleContact(contact.email)} className="btn btn-black btnBorder">Show details</button>
                             </div>
                         </li>
                     </Grid>

@@ -1,4 +1,4 @@
-import URLS, {loginURL, populateURL, createContactURL, allContactsURL} from './Settings';
+import URLS, {loginURL, populateURL, createContactURL, allContactsURL, singleContactURL} from './Settings';
 
 const createTheContact = (name, email, company, jobtitle, phone) => {
     const options = makeOptions("POST", true, { 
@@ -15,6 +15,12 @@ const createTheContact = (name, email, company, jobtitle, phone) => {
 const getAllContacts = () => {
     const options = makeOptions("GET", true);
     return fetch(allContactsURL, options)
+        .then(handleHttpErrors);
+}
+
+const getSingleContact = (email) => {
+    const options = makeOptions("POST", true, {email: email});
+    return fetch(singleContactURL, options)
         .then(handleHttpErrors);
 }
 
@@ -42,6 +48,7 @@ const login = (user, password) => {
 const apiFacade = {
     createTheContact,
     getAllContacts,
+    getSingleContact,
     setToken,
     getToken,
     loggedIn,

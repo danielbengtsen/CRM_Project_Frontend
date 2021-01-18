@@ -3,3 +3,4 @@ export const loginURL = mainURL + "login";
 export const populateURL = mainURL + "info/populate";
 export const createContactURL = mainURL + "salesperson/contacts/create-contact";
 export const allContactsURL = mainURL + "salesperson/contacts/all";
+export const singleContactURL = mainURL + "salesperson/contacts/single";
