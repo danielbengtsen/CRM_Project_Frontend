@@ -11,7 +11,8 @@ import {
   NoMatch,
   Login,
   LoggedIn,
-  CreateContact
+  CreateContact,
+  AllContacts
 } from './Components';
 import apiFacade from './apiFacade';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -22,6 +23,7 @@ import jwt_decode from "jwt-decode";
 function App() {
   const [error, setError] = useState('');
   const [createContactMsg, setCreateContactMsg] = useState('');
+  const [allContactsMsg, setAllContactsMsg] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [isSalesperson, setIsSalesperson] = useState(false);
 
@@ -70,7 +72,10 @@ function App() {
         console.log("Contact created succesfully!", res)
       })
       .catch(err => {
-        setCreateContactMsg("Error: Couldn't create contact!");
+        //setCreateContactMsg("Error: Couldn't create contact!");
+        Promise.resolve(err.fullError).then(function (value) {
+          setCreateContactMsg(value.message);
+        });
         setTimeout(() => {
           setCreateContactMsg("");
         }, 10000);
@@ -97,6 +102,10 @@ function App() {
 
               <Route path="/create-contact">
                 <CreateContact createTheContact={createTheContact} msg={createContactMsg} />
+              </Route>
+
+              <Route path="/all-contacts">
+                <AllContacts msg={allContactsMsg} />
               </Route>
 
               <Route path="/login-out">
@@ -128,6 +137,7 @@ function Header({loginMsg, isSalespersonData}) {
         (
           <React.Fragment>
               <li><NavLink exact activeClassName="active" to="/create-contact">Create Contact</NavLink></li>
+              <li><NavLink exact activeClassName="active" to="/all-contacts">All Contacts</NavLink></li>
           </React.Fragment>
         )
       }

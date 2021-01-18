@@ -4,6 +4,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import jwt_decode from "jwt-decode";
 import 'react-tabs/style/react-tabs.css';
 import Grid from '@material-ui/core/Grid';
+import PersonIcon from '@material-ui/icons/Person';
+import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
+import BusinessIcon from '@material-ui/icons/Business';
+import WorkIcon from '@material-ui/icons/Work';
+import PhoneIcon from '@material-ui/icons/Phone';
+
 
 export function Home() {
     return (
@@ -93,6 +99,75 @@ export function CreateContact({ createTheContact, msg })
             <br />
             <hr className="ownHr" />
             <p>{msg}</p>
+        </div>
+    )
+}
+
+export function AllContacts({ msg })
+{
+    const [contacts, setContacts] = useState([]);
+    const [error, setError] = useState('');
+
+
+    function showAllContacts(event) {
+        event.preventDefault();
+        apiFacade.getAllContacts()
+            .then(array => {
+                setContacts(array);
+            })
+            .catch(err => {
+                Promise.resolve(err.fullError).then(function (value) {
+                    setError(value.message);
+                });
+                setTimeout(() => {
+                    setError("");
+                  }, 10000)
+            });
+    }
+
+    let displayContacts = contacts.map((contact) => (
+        <div>
+            <ul className="list-group mb-4" key={contact.email}>
+                <Grid container spacing={0}>
+                    <Grid item xs={3}>
+                        <li className="list-group-item ownList">
+                            <div className="mb-1">
+                                <PersonIcon /> {contact.name}
+                            </div>
+                            <div className="mb-1">
+                                <AlternateEmailIcon /> {contact.email}
+                            </div>
+                            {/* <div className="mb-1">
+                                <BusinessIcon /> {contact.company}
+                            </div>
+                            <div className="mb-1">
+                                <WorkIcon /> {contact.jobtitle}
+                            </div> */}
+                            <div className="mb-1">
+                                <PhoneIcon /> {contact.phone}
+                            </div>
+                            <div>
+                                <button type="button" className="btn btn-black btnBorder">Show details</button>
+                            </div>
+                        </li>
+                    </Grid>
+                </Grid>
+            </ul>
+        </div>
+    ));
+
+    return (
+        <div>
+            <h2>All Contacts</h2>
+            <form>
+                    <button onClick={showAllContacts} type="button" className="btn btn-black btnBorder">Show all contacts</button>
+            </form>
+
+            <br />
+            <hr className="ownHr" />
+            <p>{msg}{error}</p>
+
+            {displayContacts}
         </div>
     )
 }
