@@ -11,7 +11,7 @@ import BusinessIcon from '@material-ui/icons/Business';
 import WorkIcon from '@material-ui/icons/Work';
 import PhoneIcon from '@material-ui/icons/Phone';
 
-const Contact = ({ contacts, loading, handleDelete, handleEditChange }) => {
+const Contact = ({ deleteMsg, contacts, loading, handleDelete, handleEdit }) => {
 
     Modal.setAppElement('#root')
     const customStyles = {
@@ -31,9 +31,10 @@ const Contact = ({ contacts, loading, handleDelete, handleEditChange }) => {
     const [company, setCompany] = useState('');
     const [jobtitle, setJobtitle] = useState('');
     const [phone, setPhone] = useState('');
-    const [editedPassword, setEditedPassword] = useState('');
+    const edits = { editName: "", editEmail: "", editCompany: "", editJobtitle: "", editPhone: "" };
+    const [contactEdit, setContactEdit] = useState(edits);
     const [editMsg, setEditMsg] = useState('');
-    const editStyleColor = <p className="sucsMsg">{editMsg}</p>
+    const editStyleColor = <p>{editMsg}{deleteMsg}</p>
 
     function openModal(name, email, company, jobtitle, phone) {
         setIsOpen(true);
@@ -57,16 +58,37 @@ const Contact = ({ contacts, loading, handleDelete, handleEditChange }) => {
     }
 
     function editUserSubmit(event) {
-        /* event.preventDefault();
-        apiFacade.editUser(username, editedPassword)
+        event.preventDefault();
+        console.log("old mail: " + email);
+        console.log("name: " + edits.editName);
+        console.log("email: " + edits.editEmail);
+        console.log("company: " + edits.editCompany);
+        console.log("jobtitle: " + edits.editJobtitle);
+        console.log("phone: " + edits.editPhone);
+        apiFacade.editContact(email, edits.editName, edits.editEmail, edits.editCompany, edits.editJobtitle, edits.editPhone)
         .then(res => {
             closeModal();
-            setEditMsg("The password has been updated!");
-          }) */
+            setEditMsg("Contact updated!");
+            setTimeout(() => {
+                setEditMsg("");
+            }, 10000);
+            console.log("Contact updated!", res)
+          })
+          .catch(err => {
+            closeModal();
+            Promise.resolve(err.fullError).then(function (value) {
+                setEditMsg(value.message);
+            });
+            setTimeout(() => {
+                setEditMsg("");
+            }, 10000);
+            console.log(err);
+          })
+        handleEdit();
     }
 
     function handleEditChange(event) {
-        /* setEditedPassword(event.target.value); */
+        setContactEdit({ ...contactEdit, [event.target.id]: event.target.value });
     };
 
     function modalShow() {
@@ -100,15 +122,15 @@ const Contact = ({ contacts, loading, handleDelete, handleEditChange }) => {
                         <hr className="ownHr mt-3"></hr>
                         <form onChange={handleEditChange}>
                             <div>
-                                <input className="form-control ownInputs mb-3" value={name} placeholder="Edit name.." id="editName"/>
-                                <input className="form-control ownInputs mb-3" value={email} placeholder="Edit email.." id="editEmail"/>
-                                <input className="form-control ownInputs mb-3" value={company} placeholder="Edit company.." id="editCompany"/>
-                                <input className="form-control ownInputs mb-3" value={jobtitle} placeholder="Edit job title.." id="editJobtitle"/>
-                                <input className="form-control ownInputs mb-3" value={phone} placeholder="Edit phone.." id="editPhone"/>
+                                <input className="form-control ownInputs mb-3" placeholder="Edit name.." id="editName"/>
+                                <input className="form-control ownInputs mb-3" placeholder="Edit email.." id="editEmail"/>
+                                <input className="form-control ownInputs mb-3" placeholder="Edit company.." id="editCompany"/>
+                                <input className="form-control ownInputs mb-3" placeholder="Edit job title.." id="editJobtitle"/>
+                                <input className="form-control ownInputs mb-3" placeholder="Edit phone.." id="editPhone"/>
                             </div>
                             <div>
                                 <button onClick={editUserSubmit} className="btn btn-black btnBorder">Update</button>
-                                <button onClick={closeModal} Style="" className="btn btn-black btnBorder btnBorderClose">Close</button>
+                                <button onClick={closeModal} className="btn btn-black btnBorder btnBorderClose">Close</button>
                             </div>
                         </form>
                     </Modal>

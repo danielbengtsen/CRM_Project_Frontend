@@ -72,7 +72,6 @@ function App() {
         console.log("Contact created succesfully!", res)
       })
       .catch(err => {
-        //setCreateContactMsg("Error: Couldn't create contact!");
         Promise.resolve(err.fullError).then(function (value) {
           setCreateContactMsg(value.message);
         });

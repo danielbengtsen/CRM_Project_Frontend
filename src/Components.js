@@ -108,6 +108,7 @@ export function AllContacts({ msg })
 {
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [deleteMsg, setDeleteMsg] = useState('');
 
 
     function handleSubmit(event) {
@@ -118,16 +119,32 @@ export function AllContacts({ msg })
             })
     }
 
-    function handleDelete(name) {
-        /* apiFacade.deleteUser(name)
-            .then(updateUsers); */
+    function handleDelete(email) {
+        console.log(email);
+        apiFacade.deleteContact(email)
+        .then(res => {
+            setDeleteMsg("Contact deleted!");
+            setTimeout(() => {
+                setDeleteMsg("");
+            }, 10000);
+            console.log("Contact deleted!", res)
+          })
+          .catch(err => {
+            Promise.resolve(err.fullError).then(function (value) {
+                setDeleteMsg(value.message);
+            });
+            setTimeout(() => {
+                setDeleteMsg("");
+            }, 10000);
+            console.log(err);
+          })
     }
 
     function handleEdit() {
         apiFacade.getAllContacts()
             .then(array => {
                 setContacts(array);
-            })
+            });
     }
 
     return (
@@ -136,7 +153,7 @@ export function AllContacts({ msg })
             <hr className="ownHr"/>
             <button className="btn btn-black btnBorder" onClick={handleSubmit}>Get Contacts</button> <br/> <br/>
             <hr className="ownHr"/>
-            <Contact contacts={contacts} loading={loading} handleDelete={handleDelete} />
+            <Contact deleteMsg={deleteMsg} contacts={contacts} loading={loading} handleDelete={handleDelete} handleEdit={handleEdit} />
         </div>
     )
 }
