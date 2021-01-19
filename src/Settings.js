@@ -1,4 +1,4 @@
-const mainURL = "https://dallal.dk/crmbackend/api/";
+const mainURL = "https://dallal.dk/tomcat/crmbackend/api/";
 export const loginURL = mainURL + "login";
 export const populateURL = mainURL + "info/populate";
 export const createContactURL = mainURL + "salesperson/contacts/create-contact";
