@@ -1,4 +1,4 @@
-const mainURL = "http://localhost:8080/CRM_Backend/api/";
+const mainURL = "https://dallal.dk/crmbackend/api/";
 export const loginURL = mainURL + "login";
 export const populateURL = mainURL + "info/populate";
 export const createContactURL = mainURL + "salesperson/contacts/create-contact";
